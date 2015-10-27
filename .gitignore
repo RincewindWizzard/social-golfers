@@ -60,4 +60,4 @@ target/
 *.aux
 *.log
 *.pdf 
-bin/
+build/
