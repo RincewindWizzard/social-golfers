@@ -3,10 +3,11 @@
 \usepackage[utf8]{inputenc}  % Erlaubt es, Umlaute etc. zu verwenden (Datei muss UTF-8 Kodierung haben)
 \usepackage[ngermanb]{babel} % Deutsche Übersetzung und Silbentrennung (Neue Rechtschreibung)
 \usepackage{url}
+\usepackage[autostyle=true,german=quotes]{csquotes}
 
 \begin{document}
 
-\title{Golf Tabu Memetik}
+\title{Ein Memetischer Algorithmus für das Social Golfer Problem}
 \author{Dennis Lindemann}
 
 \begin{abstract}
@@ -22,18 +23,19 @@
 
 \section{Mathematische Modellierung}
     \input{sections/Modellierung.tex}
-\section{Memetischer Lösungsansatz}
+\section{Evolutionärer Algorithmus}
   \subsection{Mutationen}
     Die Mutationen kann man als einen weiten Sprung zu einer anderen Lösung ansehen. (Makrooptimierung)
   \subsection{Tabu Suche}
-    Die Tabu Suche ist eher
+    Die Tabu Suche ist eher ein kleiner Sprung, um eine bestehende (ungültige) Lösung zu verfeinern. (Mikrooptimierung)
 
-
+\section{Testergebnisse}
+Hier werden die Ergebnisse meiner Performancetests vorgestellt und mit den Ergebnissen aus dem Paper verglichen. Ein besonderes Augenmerk werde ich hierbei auf Laufzeit und Ressourcenverbrauch im Sinne der Landau Notation legen.
 
 
 
 \section{Fazit}
-
+Hier steht, was ich von der ganzen Sache halte und welche Ergebnisse ich aus dieser Arbeit gezogen habe.
 
 \begin{thebibliography}{9}  
 \input{sections/bibliography.tex}    
