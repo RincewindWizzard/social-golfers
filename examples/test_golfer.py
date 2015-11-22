@@ -11,17 +11,31 @@ class TestGolfer(unittest.TestCase):
   def setUp(self):
     self.golfclub = [ i for i in range(CLUB_SIZE)]
     self.week = Week(self.golfclub, GROUPS)
-    self.schedule = Schedule(self.week, swap(self.week, 0, -1))
+    self.schedule = [ self.week, swap(self.week, 0, -1) ]
 
   def test_mutate(self):
-    schedule = Schedule(*[ mutate(self.week) for i in range(10)])
-    for week in schedule.weeks:
-      print(str(week))
+    schedule = [ mutate(self.week) for i in range(10) ]
+    #for week in schedule:
+    #  print(str(week))
 
   def test_together(self):
-    self.assertEqual(self.schedule.together(3, 4), 2, msg=self.schedule)
-    self.assertEqual(self.schedule.together(0, 3), 1, msg=self.schedule)
-    self.assertEqual(self.schedule.together(2, 3), 0, msg=self.schedule)
+    self.assertEqual(together(3, 4, self.schedule), 2, msg=self.schedule)
+    self.assertEqual(together(0, 3, self.schedule), 1, msg=self.schedule)
+    self.assertEqual(together(2, 3, self.schedule), 0, msg=self.schedule)
+
+  def test_conflicts(self):
+    self.assertEqual(conflicts([self.week, self.week]), CLUB_SIZE)
+
+  def test_conflictors(self):
+    for p in self.golfclub:
+      if conflicting(self.golfclub, self.schedule, p):
+        print(p)
+
+  def test_mutations(self):
+    for i in range(1, 6):
+      for j in range(1, 6):
+        week = Week( list(range(i*j)), i )
+        self.assertEqual(len(list(mutations(week))), possible_mutations(week))
 
   def test_weekEquals(self):
     club = self.golfclub

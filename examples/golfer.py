@@ -5,7 +5,7 @@ Folgende Pakete werden benötigt:
 """
 from sortedcontainers import SortedList, SortedSet, SortedDict
 from functools import reduce
-from random import randrange, sample
+from random import randrange, sample, expovariate
 
 # -------------------------------------------------------
 # Datenstrukturen
@@ -34,43 +34,33 @@ class Week(object):
     return self._groupcount
 
   @property
+  def playercount(self):
+    return self._groupsize * self._groupcount 
+
+  @property
   def as_list(self):
     # returns as list datastructure
     return reduce(lambda a,b: a + b, map(list, self.groups))
+
+  def __getitem__(self, key):
+    return self.groups[key]
 
   def __eq__(self, other):
     # Vergleiche zwei Wochen, das funktioniert, weil wir vorher alle Symmetrien ausgeschlossen haben
     return self.groups == other.groups
 
   def __repr__(self):
-    return "Week({})".format(", ".join(map(lambda g: str(list(g)), self.groups)))
-
-  def __str__(self):
     return str(list(map(list, self.groups)))
 
-class Schedule(object):
-  def __init__(self, *weeks):
-    self.weeks = list(weeks)
 
-  def __repr__(self):
-    return "Schedule(" + ", ".join(map(str, self.weeks)) + ")"
-  
-  @property
-  def as_list(self):
-    return list(map(lambda w: w.as_list, self.weeks))
-
-  def __str__(self):
-    return str(self.as_list)
-
-  def together(self, p1, p2):
-    count = 0
-    for week in self.weeks:
-      for group in week.groups:
-        if p1 in group:
-          if p2 in group:
-            count += 1
-          break
-    return count
+def as_matrix(schedule):
+  weeks = []
+  for week in schedule:
+    week_m = []
+    for group in week.groups:
+      week_m.append(list(group))
+    weeks.append(week_m)
+  return weeks
 
 # -----------------------------------------
 # Hier beginnen die Funktionen, die für den Algorithmus gebraucht werden
@@ -90,8 +80,51 @@ def mutate(week):
 
   return swap(week, g1 * week.groupsize + p1, g2 * week.groupsize + p2)
 
-#def conflict(p1, p2, weeks):
-#  for p 
+def possible_mutations(week):
+  return int(week.groupsize ** 2 * (week.groupcount ** 2 - week.groupcount) // 2)
+
+def mutations(week):
+  for g1 in range(week.groupcount):
+    for g2 in range(g1 + 1, week.groupcount):
+      for p1 in range(week.groupsize):
+        for p2 in range(week.groupsize):
+          yield swap(week, g1 * p1, g2 * p2)
+
+def together(p1, p2, weeks):
+  # Wie oft spielen p1 und p2 zusammen
+  count = 0
+  for week in weeks:
+    for group in week.groups:
+      if p1 in group:
+        if p2 in group:
+          count += 1
+        break
+  return count
+
+def conflicts(weeks, week=None):
+  # Wie viele Konflikte gibt es? (Zwei Golfer mehr als einmal)
+  cons = []
+  for i, p1 in enumerate(weeks[0].as_list):
+    for j, p2 in enumerate(weeks[0].as_list):
+      if i < j and together(p1, p2, weeks) > 1:
+        cons.append(p1)
+        cons.append(p2)
+  return cons
+
+def long_jump(week):
+  # Mutiert eine Woche mehrere Male (Poisson Distributed)
+  for i in range(int(expovariate(1 / week.groupcount * week.groupsize))):
+    week = mutate(week)
+  return week
+
+def conflicting(club, weeks, p1):
+  for p2 in club:
+    if not p1 == p2:
+      if together(p1, p2, weeks) > 1:
+        return True
+  return False
+
+
 
 if __name__ == '__main__':
   ...

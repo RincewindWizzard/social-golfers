@@ -1,9 +1,16 @@
 \documentclass[draft]{tcs-seminar}
 
 \usepackage[utf8]{inputenc}  % Erlaubt es, Umlaute etc. zu verwenden (Datei muss UTF-8 Kodierung haben)
-\usepackage[ngermanb]{babel} % Deutsche Übersetzung und Silbentrennung (Neue Rechtschreibung)
+\usepackage[OT2, T1]{fontenc}
+\usepackage[russian,ngerman]{babel}
 \usepackage{url}
+\usepackage{amsmath}
 \usepackage[autostyle=true,german=quotes]{csquotes}
+
+%\usepackage{breqn}
+% convienience
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\che}{\text{\foreignlanguage{russian}{ч}}}
 
 \begin{document}
 
@@ -23,10 +30,10 @@
 
 \section{Mathematische Modellierung}
     \input{sections/Modellierung.tex}
-\section{Evolutionärer Algorithmus}
-  \subsection{Mutationen}
+\section{Memetischer Algorithmus}
+  \subsection{Evolution}
     Die Mutationen kann man als einen weiten Sprung zu einer anderen Lösung ansehen. (Makrooptimierung)
-  \subsection{Tabu Suche}
+  \subsection{Lokale Suche}
     Die Tabu Suche ist eher ein kleiner Sprung, um eine bestehende (ungültige) Lösung zu verfeinern. (Mikrooptimierung)
 
 \section{Testergebnisse}

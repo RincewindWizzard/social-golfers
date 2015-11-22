@@ -1,5 +1,33 @@
+Wie bereits beschrieben, ist die Aufgabenstellung $n = g \cdot s$ Golfer in $g$ Gruppen zu je $s$ Spielern in $w$ Wochen einzuteilen, so dass zwei Golfer nicht häufiger als ein mal gemeinsam spielen. Eine Probleminstanz besteht also aus dem Tripel $(g, s, w)$ ein (möglicherweise auch falsche) Lösung hat die Form:
+\begin{gather*}
+  \sigma : \N_g \times \N_w \rightarrow 2^{\N_n}
+\end{gather*}
+Mit der Einschränkung $|\sigma(g',w')| = s$. Wobei $\N_i = \{1, 2, 3, ..., i\}$ für alle $i \in \N$ gilt. $\sigma$ is also eine Funktion, die für ein Tupel mit der Woche und der Gruppe eine Menge von Spielern zurückgibt, die sich in dieser Gruppe befinden.
+Notwendige Bedingungen für eine Lösung sind folgende:\\
+Jeder Golfer spielt pro Woche genau einmal:
+\begin{equation} 
+  \forall p \in \N_n : \forall \omega \in \N_w : \exists !\che \in \N_g : p \in \sigma(\che, \omega)
+\end{equation}
+Anders ausgedrückt: Die Gruppen sind innerhalb einer Woche paarweise disjunkt:
+\begin{equation}
+  \begin{split}
+    & \forall \omega \in \N_w : \forall \che, \che' \in \N_g:\\
+    & \che \neq \che' \Rightarrow \sigma(\che, \omega)  	\cap \sigma(\che', \omega) = \emptyset
+  \end{split}
+\end{equation}
+Im weiteren Verlauf werden wir die Notation $\gamma(p, \omega)$ benutzen, um die Nummer der Gruppe zu bezeichnen, in der der Spieler $p$ in der Woche $\omega$ spielt.\\
+Je zwei Golfer spielen maximal einmal gemeinsam in der selben Gruppe:
+\begin{equation}\begin{split}
+  & \forall \omega, \omega' \in \N_w : \forall \che, \che' \in \N_g:\\
+  & \che \neq \che' \Rightarrow |\sigma(\che, \omega) \cap \sigma(\che', \omega')| \leq 1
+\end{split}\end{equation}
+Wir definieren uns $\#_\sigma(p_1, p_2)$ als die Anzahl, wie oft Spieler $p_1$ und Spieler $p_2$ zusammen gespielt haben.
+\begin{equation} 
+  \#_\sigma(p_1, p_2) = \sum_{\che \in \N_g} \sum_{\omega \in \N_w}[\{p_1, p_2 \} \subseteq \sigma(\che, \omega)]
+\end{equation}
+Hierbei bezeichnet $[\;]$ die Iverson Klammern und es gilt $[true] = 1$ sowie $[false] = 0$. 
+Um auszudrücken, wie weit wir von der Erfüllung dieser Bedingung entfernt sind, definieren wir eine Funktion $v_\sigma(p_1, p_2) = \max(0, \#_\sigma(p_1, p_2) - 1)$.
 
-Hier wird stehen, in welcher Art die Mathematischen Objekte definiert sind.
 
 \subsection{Symmetrievermeidung}
 Lösungen für das SGP sind hochsymmetrisch, dass heißt: Zwei Wochenpläne können komplett anders ausehen und trotzdem die gleiche Lösung repräsentieren. In diesem Absatz gehe ich darauf ein, wie Symmetrien vermieden werden.
