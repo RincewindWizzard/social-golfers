@@ -28,6 +28,25 @@ Wir definieren uns $\#_\sigma(p_1, p_2)$ als die Anzahl, wie oft Spieler $p_1$ u
 Hierbei bezeichnet $[\;]$ die Iverson Klammern und es gilt $[true] = 1$ sowie $[false] = 0$. 
 Um auszudrücken, wie weit wir von der Erfüllung dieser Bedingung entfernt sind, definieren wir eine Funktion $v_\sigma(p_1, p_2) = \max(0, \#_\sigma(p_1, p_2) - 1)$.
 
-
 \subsection{Symmetrievermeidung}
-Lösungen für das SGP sind hochsymmetrisch, dass heißt: Zwei Wochenpläne können komplett anders ausehen und trotzdem die gleiche Lösung repräsentieren. In diesem Absatz gehe ich darauf ein, wie Symmetrien vermieden werden.
+Für eine Lösung existieren sehr viele äquivalente Lösungen. Innerhalb einer Gruppe ist die Reihenfolge der Golfer beliebig.
+Ebenso ist die Reihenfolge der Gruppen innerhalb einer Woche, sowie die Wochen an sich belanglos. Außerdem kann einer neue äquivalente Lösung erzeugt werden, indem man überall die Namen von zwei Golfern tauscht. Wir stellen also fest, dass jede Lösung $(s!)^{g \cdot w} (g!)^w w!(gs)$ symmetrische Lösungen besitzt. 
+
+Um zwei Lösungen unterscheiden zu können, braucht es unterschiedliche Strategien, um diese Symmetrien zu brechen. 
+Die Symmetrie innerhalb einer Gruppe wird vermieden, indem man Mengen anstatt Listen verwendet. Diese Mengen werden innerhalb einer Woche anhand ihres kleinsten Elementes geordnet.
+\begin{equation}
+  \begin{split}
+    & \sigma(\che, \omega) \prec \sigma(\che + 1, \omega) \\
+    & \Leftrightarrow \min(\sigma(\che, \omega)) < \min(\sigma(\che + 1, \omega))
+  \end{split}
+\end{equation}
+Wochen werden anhand des zweitkleinsten Elementes der ersten Gruppe geordnet.
+\begin{equation}
+  \begin{split}
+    & \omega_i \prec \omega_{i+1} \\
+    & \Leftrightarrow \min(\sigma(1, i) \setminus \{ 1 \}) < \min(\sigma(1, i + 1) \setminus \{ 1 \})
+  \end{split}
+\end{equation}
+Die Symmetrien, welche durch Umbenennung enstehen, wurden in dem Artikel nicht weiter behandelt. In \cite{sellmann02} wird dieses Thema weiter behandelt.
+
+
