@@ -1,5 +1,55 @@
-  \subsection{Evolution}
-    Die Mutationen kann man als einen weiten Sprung zu einer anderen Lösung ansehen. (Makrooptimierung)
-  \subsection{Lokale Suche}
-    Die Tabu Suche ist eher ein kleiner Sprung, um eine bestehende (ungültige) Lösung zu verfeinern. (Mikrooptimierung)
+\subsection{Evolution}
+Die bereits benannten Symmetrien erschweren den Entwurf eines evolutionären Algorithmus, da schwer entscheidbar ist, ob eine neue Lösung sich überhaupt von den Bisherigen unterscheidet.
+Wenn diese Symmetrien bei der Rekombination von zwei Lösungen nicht von vorneherein ausgeschlossen werden können, gewinnt man hierdurch keine Zeit. Aus diesen Gründen wird für den hier vorgestellten Algorithmus auch auf die Rekombination verzichtet und wir beschränken uns auf eine Mutation. 
+
+Sei dazu $\sigma$ ein $w$ Wochen langer Spielplan mit $g$ Gruppen zu je $s$ Spielern. Die Darstellung erfolgt über einen String $u = t_{11} :: t_{12} :: \cdots :: t_{wg}$ mit $t_{ij} \in \N_{g \cdot s}^s$.
+
+\subsubsection{Beispiel}
+\begin{equation}
+\begin{split} 
+  t_{11} = \{ 1, 2, 3\} \\
+  t_{12} = \{ 4, 5, 6\} \\
+  t_{13} = \{ 7, 8, 9\} \\
+\end{split}
+\end{equation}
+Ein Spielplan wird also als Aneinanderreihung von Spielernummern gruppiert nach Woche und Gruppe dargestellt. Diese Darstellung ist äquivalent zu bisher präsentierten mathematischen Modellierung.
+Diese Darstellung berücksichtigt zwar keine Symmetrien, allerdings gilt die Einschränkung, dass ein Golfer nur einmal pro Woche eingeteilt werden kann. 
+Um eine neue Woche zu erzeugen nutzen wir also eine beliebige Permutation von $\{ 1, \cdots, g \cdot s\}$. Alle Funktionen und Operatoren innerhalb des Algorithmus nutzen intern diese Struktur. 
+Der Memetische Algorithmus erzeugt einen Pool an Spielplänen, aus denen gute Lösungen ausgewählt, mutiert und einem Lernprozess unterzogen werden.
+
+Bei der Mutation werden innerhalb einer Woche zwei Spieler aus unterschiedlichen Gruppen vertauscht. Die Menge der möglichen Tauschaktionen lässt sich beschreiben als:
+\begin{equation}
+  \mathcal{S}(\sigma) = \{ ((\omega, p_1), (\omega, p_2)) \;|\; \gamma(p_1, \omega) \neq \gamma(p_2, \omega) \}
+\end{equation}
+Jede ausgewählte Lösung wird eine Poisson-Verteilte Anzahl mit dem Parameter $(g \cdot s)^{-1}$ oft wiederholt, sodass im Mittel $w$ mal getauscht wird.
+
+
+
+\subsection{Lokale Suche}
+Wie auch bei der Mutation werden bei der lokalen Suche Spieler aus unterschiedlichen Gruppen einer Woche vertauscht. 
+Allerdings wird hierbei darauf geachtet, nur diejenigen Spieler zu tauschen, deren Position einen Konflikt zur  Bedingung (\ref{maximale Sozialisation}) bedeutet. 
+Wir drücken dies aus mit $v_0((\omega, p)) = \texttt{true}$ genau dann, wenn:
+\begin{equation}
+  \exists p' \in \sigma(\gamma(p,\omega), \omega): p' \neq p \Rightarrow v_\sigma(p, p') > 1
+\end{equation}
+Die Menge der hierdurch möglichen Täusche ist:
+\begin{equation}
+  \mathcal{S}^-(\sigma) = \{ ((\omega, p_1), (\omega, p_2)) \in \mathcal{S} \;|\; v_0((\omega, p_1)) \}
+\end{equation}
+
+
+\subsection{Tabu}
+Die Tabu Teil des Algorithmus besteht aus mehreren Listen für je eine Woche in denen Tupel der Form $(p_1, p_2, i)$ enthalten sind. Wir bezeichnen mit $tabu[\omega]$ die Tabu Liste für die Woche $\omega$. 
+Jedes Mal, wenn zwei Spieler getauscht worden sind, wird ein zufälliger Wert $\rho \in [4, 100]$ erzeugt. Dieser gibt an, wie viele Iterationen diese beiden Spieler nicht mehr getauscht werden dürfen. Die SUmme von $\rho$ und der aktuellen Iteration wird in $i$ gespeichert. Hieraus resultiert eine neue Tauschmenge:
+\begin{equation}
+\begin{split} 
+  \mathcal{S}^t(\sigma, k) = & \{ ((\omega, p_1), (\omega, p_2)) \in \mathcal{S}^- \\
+    & \hspace{5 mm} | \; \nexists k' > k: (p_1, p_2, k') \in tabu[\omega] \}
+\end{split} 
+\end{equation}
+
+
+\begin{equation}
+  \mathcal{S}^*(\sigma, \sigma*) = \{ (t_1, t_2) \in \mathcal{S}^- \;|\; f(\sigma [t_1 \leftrightarrow t_2] ) < f(\sigma *) \}
+\end{equation}
 
