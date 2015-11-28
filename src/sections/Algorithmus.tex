@@ -1,15 +1,15 @@
 \subsection{Evolution}
 Die bereits benannten Symmetrien erschweren den Entwurf eines evolutionären Algorithmus, da schwer entscheidbar ist, ob eine neue Lösung sich überhaupt von den Bisherigen unterscheidet.
-Wenn diese Symmetrien bei der Rekombination von zwei Lösungen nicht von vorneherein ausgeschlossen werden können, gewinnt man hierdurch keine Zeit. Aus diesen Gründen wird für den hier vorgestellten Algorithmus auch auf die Rekombination verzichtet und wir beschränken uns auf eine Mutation. 
+Wenn diese Symmetrien bei der Rekombination von zwei Lösungen nicht von vorne herein ausgeschlossen werden können, gewinnt man hierdurch keine Zeit. 
+Aus diesen Gründen wird für den hier vorgestellten Algorithmus auch auf die Rekombination verzichtet und wir beschränken uns auf eine Mutation. 
 
 Sei dazu $\sigma$ ein $w$ Wochen langer Spielplan mit $g$ Gruppen zu je $s$ Spielern. Die Darstellung erfolgt über einen String $u = t_{11} :: t_{12} :: \cdots :: t_{wg}$ mit $t_{ij} \in \N_{g \cdot s}^s$.
 
 \subsubsection{Beispiel}
+\todo{Something}
 \begin{equation}
 \begin{split} 
-  t_{11} = \{ 1, 2, 3\} \\
-  t_{12} = \{ 4, 5, 6\} \\
-  t_{13} = \{ 7, 8, 9\} \\
+  u = 1, 2, 3, 4, 5, 6, 7, 8, 9
 \end{split}
 \end{equation}
 Ein Spielplan wird also als Aneinanderreihung von Spielernummern gruppiert nach Woche und Gruppe dargestellt. Diese Darstellung ist äquivalent zu bisher präsentierten mathematischen Modellierung.
@@ -40,7 +40,7 @@ Die Menge der hierdurch möglichen Täusche ist:
 
 \subsection{Tabu}
 Die Tabu Teil des Algorithmus besteht aus mehreren Listen für je eine Woche in denen Tupel der Form $(p_1, p_2, i)$ enthalten sind. Wir bezeichnen mit $tabu[\omega]$ die Tabu Liste für die Woche $\omega$. 
-Jedes Mal, wenn zwei Spieler getauscht worden sind, wird ein zufälliger Wert $\rho \in [4, 100]$ erzeugt. Dieser gibt an, wie viele Iterationen diese beiden Spieler nicht mehr getauscht werden dürfen. Die SUmme von $\rho$ und der aktuellen Iteration wird in $i$ gespeichert. Hieraus resultiert eine neue Tauschmenge:
+Jedes Mal, wenn zwei Spieler getauscht worden sind, wird ein zufälliger Wert $\rho \in [4, 100]$ erzeugt. Dieser gibt an, wie viele Iterationen diese beiden Spieler nicht mehr getauscht werden dürfen. Die Summe von $\rho$ und der aktuellen Iteration wird in $i$ gespeichert. Hieraus resultiert eine neue Tauschmenge:
 \begin{equation}
 \begin{split} 
   \mathcal{S}^t(\sigma, k) = & \{ ((\omega, p_1), (\omega, p_2)) \in \mathcal{S}^- \\
@@ -48,8 +48,11 @@ Jedes Mal, wenn zwei Spieler getauscht worden sind, wird ein zufälliger Wert $\
 \end{split} 
 \end{equation}
 
-
+Parallel zu dieser Tabu Suche werden allerdings auch Schritte beachtet, die die aktuell beste Lösung weiter verbessern. Wir nennen die zugehörige Menge $\mathcal{S}^*(\sigma, \sigma*)$:
 \begin{equation}
   \mathcal{S}^*(\sigma, \sigma*) = \{ (t_1, t_2) \in \mathcal{S}^- \;|\; f(\sigma [t_1 \leftrightarrow t_2] ) < f(\sigma *) \}
 \end{equation}
+Hierbei bezeichnet $\sigma^*$ die beste bekannte Lösung und $\sigma [(\omega, p_1) \leftrightarrow (\omega, p_2)]$ bezeichnet die Lösung, bei der in der  Woche $\omega$ Spieler $p_1$ und $p_2$ getauscht wurden.\\
+$f(\sigma [t_1 \leftrightarrow t_2])$ ist die Anzahl der Integritätsverletzungen, welche die neue Lösung hat.
+
 
