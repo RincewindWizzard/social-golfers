@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import random
+import itertools
 
 
 # Erzeugt eine zufällige Lösung
@@ -35,17 +36,19 @@ def repr_solution(solution):
   s += '\n]'
   return s
 
+# bildet 2-er tuple aus einer Liste von Zahlen
+def combinations(l):
+  for i, p1 in enumerate(l):
+    for j in range(i + 1, len(l)):
+      p2 = l[j]
+      yield (min(p1, p2), max(p1, p2))
+
 # Gib Spieler Paarungen zurück
 def pairs(solution):
-  for week in solution:
+  for w, week in enumerate(solution):
     for group in week:
-      for i, p1 in enumerate(group):
-        for j in range(i + 1, len(group)):
-          p2 = group[j]
-          if p1 < p2:
-            yield (p1, p2)
-          else:
-            yield (p2, p1)
+      for p1, p2 in combinations(group):
+        yield (p1, p2)
 
 # wie oft wurde das Lösungskriterium verletzt?
 def violations(solution):
@@ -56,7 +59,12 @@ def violations(solution):
     else:
       paired[pair] = 0
 
-  return sum(paired.values())
+  return sum(paired.values()), paired
+
+def indexof(week, player):
+  for i, group in enumerate(week):
+    if player in group:
+      return i * len(group) + group.index(player)
 
 # in-place swap of players inside a week
 def swap(solution, w, a, b):
@@ -91,6 +99,60 @@ def mutate(solution):
     a, b = random.sample(range(players(solution)), 2)
     swap(solution, w, a, b)
 
+# gibt Spieler zurück, die innerhalb ihrer Gruppe im Konflikt stehen
 
-  
-      
+"""
+def preferred_swaps(solution, violats=None, tabu = None, iteration = 0, violation_threshold = 0):
+  pairing_sum, pairing = violats if violats else violations(solution)
+  results = []
+
+  for w, week in enumerate(solution):
+    week_results = []
+    results.append(week_results)
+    for group in week:
+      group_results = []
+      week_results.append(group_results)
+      for p1, p2 in combinations(group):
+        if (p1, p2) in pairing and pairing[p1, p2] > 0: # hier stehen zwei im konflikt
+
+          # wie viel würde dieser taushc verbessern
+          a = indexof(week, p1)
+          b = indexof(week, p2)
+          swap(solution, w, a, b) # test
+          new_violations = violations(solution)
+          swap(solution, w, a, b) # rollback
+
+          if (not tabu or not (p1, p2) in tabu[w] or tabu[w][p1, p2] < iteration) or new_violations < violation_threshold:   # nur wenn dieser Schritt gerade nicht Tabu ist oder er verdammt gut ist
+            if not (w, p1) in group_results:
+              group_results.append((w, p1))
+            if not (w, p2) in group_results:
+              group_results.append((w, p2))
+  return results
+"""
+
+
+
+def swaps(solution, violats=None):
+  pairing_sum, pairing = violats if violats else violations(solution)
+  for w, week in enumerate(solution):
+    swapable_groups = []
+    for group in week:
+      swapable_players = []
+      swapable_groups.append(swapable_players)
+      for p1, p2 in combinations(group):
+        swapable_players.append(p1)
+        swapable_players.append(p2)
+
+    for g1, g2 in combinations(swapable_groups):
+      for p1 in g1:
+        for p2 in g2:
+          yield w, indexof(week, p1), indexof(week, p2)
+
+def evaluate_swap(solution, swapper):
+  swap(solution, *swapper) # test
+  violation_sum, pairing = violations(solution)
+  swap(solution, *swapper) # rollback
+  return violation_sum
+    
+
+
