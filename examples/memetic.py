@@ -1,43 +1,36 @@
 #!/usr/bin/python3
 import sys
-import random
+import random, copy, operator
 from dotgraph import graph, showGraph
+from sgp import *
 
-def generateSolution(groups, size, weeks):
-  players = list(range(groups * size))
-  solution = []
-  for w in range(weeks):
-    permutation = random.sample(players, groups * size)
-    week = []
-    for g in range(groups):
-      week.append(permutation[g * size : g * size + size])
-    solution.append(week)
+POOLSIZE = 100
+MAX_ITER = 100
 
-  return solution
+def SGP_solver(groups, size, weeks):
+  pool = []
+  for i in range(POOLSIZE):
+    solution = generateSolution(groups, size, weeks)
+    pool.append((violations(solution), solution))
 
+  for j in range(MAX_ITER):
+    violats, solution = copy.deepcopy(select(pool))
+    mutate(solution)
+    learning(solution)
+    max_index, max_value = max(enumerate(pool), key=operator.itemgetter(1))
+    pool[max_index] = (violations(solution), solution)
+    if pool[max_index][0] == 0: # es wurde eine korrekte Lösung gefunden
+      break
 
-def normalize_week(week):
-  for group in week:
-    group.sort()
-  return week
+  return min(pool)
 
-def normalize_solution(solution):
-  for week in solution:
-    for group in week:
-      group.sort()
-    week.sort(key=lambda g: g[0])
-  solution.sort(key=lambda w: w[0][1])
-  return solution
+# wählt eine Lösung aus dem Pool aus
+def select(pool):
+  return random.choice(pool)
 
-def repr_solution(solution):
-  s = '[\n'
-  for week in solution:
-      s += '\t['
-      for group in week:
-        s += '\n\t\t' + str(group) + ','
-      s += '\n\t],\n'
-  s += '\n]'
-  return s
+# hier wird die lokale Tabu suche angewendet
+def learning(solution):
+  ...
 
 if __name__ == '__main__':
   if len(sys.argv) == 4:
@@ -45,12 +38,10 @@ if __name__ == '__main__':
     size = int(sys.argv[2])
     weeks = int(sys.argv[3])
   else: 
-    groups = 3
-    size = 2
-    weeks = 3
+    groups = 5
+    size = 4
+    weeks = 5
 
-  solution = generateSolution(groups, size, weeks)
-  print(solution)
-  print(repr_solution(normalize_solution(solution)))
-  showGraph(solution)
-
+  violats, solution = SGP_solver(groups, size, weeks)
+  print(repr_solution(solution), violats)
+  #showGraph(solution)
