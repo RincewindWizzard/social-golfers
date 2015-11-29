@@ -33,6 +33,7 @@ class SGP_solver(object):
       violats, solution = copy.deepcopy(random.choice(self.pool))
 
       if violats == 0:
+        self.solution = solution
         return solution
 
       # Evolution
@@ -58,7 +59,11 @@ class SGP_solver(object):
     best_solution = copy.deepcopy(solution)
     best_violations = sgp.violations(solution)[0]
 
-    for iteration in range(self.max_learning):    
+    # wie lange wird weiter gesucht, obwohl keine verbesserung eintritt
+    learning_semaphore = self.max_learning
+    iteration = 0
+    while learning_semaphore > 0:
+      iteration += 1
       if best_violations == 0 or self.timeout: # were done
         break 
 
@@ -85,6 +90,9 @@ class SGP_solver(object):
           best_violations = nex_viol
           print(best_violations, end=' ')
           sys.stdout.flush()
+          learning_semaphore = self.max_learning
+        else:
+          learning_semaphore -= 1
 
       except ValueError as e:
         break

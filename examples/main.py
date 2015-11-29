@@ -15,7 +15,9 @@ def already_solved(groups, size, weeks):
   return os.path.isfile(solution_filename(groups, size, weeks))
 
 def save_state(solver):
-  json.dump(solver.solution, open(solution_filename(solver.groups, solver.size, solver.weeks), 'w'))
+  if solver.solution and sgp.violations(solver.solution)[0] == 0:
+    with open(solution_filename(solver.groups, solver.size, solver.weeks), 'w') as f:
+      f.write(sgp.repr_solution(solver.solution))
   json.dump(solver.pool, open(state_filename(solver.groups, solver.size, solver.weeks), 'w'))
 
 def load_state(groups, size, weeks):
@@ -51,7 +53,7 @@ def main():
     # eigentlich sollte man hier gucken, ob alles gelöst wurde, allerdings wird das zu meinen Lebzeiten wohl nicht mehr fertig werden
     while True:
       for size in range(2, max_size):
-        for groups in range(2, max_groups):
+        for groups in range(3, max_groups):
           for weeks in range(2, min(groups * size - 2, max_weeks)):
             print('SGP({}, {}, {}): '.format(groups, size, weeks), end='')
             # wurde schon eine Lösung gefunden?

@@ -27,11 +27,14 @@ def normalize_solution(solution):
 
 # Menschenlesbare Repräsentation einer Lösung
 def repr_solution(solution):
+  solution = normalize_solution(solution)
+  
+  playernames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Б', 'Г', 'Д', 'Ж', 'З', 'И', 'Л', 'П', 'Ф', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
   s = '[\n'
   for week in solution:
       s += '\t['
       for group in week:
-        s += '\n\t\t' + str(group) + ','
+        s += '\n\t\t[' + ', '.join(map(lambda i: playernames[i], group)) + '],'
       s += '\n\t],\n'
   s += '\n]'
   return s
