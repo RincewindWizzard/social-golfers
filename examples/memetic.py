@@ -7,7 +7,7 @@ from time import time
 import sgp
 
 class SGP_solver(object):
-  def __init__(self, groups, size, weeks, poolsize = 4, pool = None, timeout = 60, max_learning = 30):
+  def __init__(self, groups, size, weeks, poolsize = 25, pool = None, timeout = 600, max_learning = 30):
     self.groups = groups
     self.size = size
     self.weeks = weeks
@@ -60,10 +60,8 @@ class SGP_solver(object):
     best_violations = sgp.violations(solution)[0]
 
     # wie lange wird weiter gesucht, obwohl keine verbesserung eintritt
-    learning_semaphore = self.max_learning
-    iteration = 0
-    while learning_semaphore > 0:
-      iteration += 1
+    #learning_semaphore = self.max_learning
+    for iteration in range(self.groups * self.weeks):
       if best_violations == 0 or self.timeout: # were done
         break 
 
@@ -90,9 +88,7 @@ class SGP_solver(object):
           best_violations = nex_viol
           print(best_violations, end=' ')
           sys.stdout.flush()
-          learning_semaphore = self.max_learning
-        else:
-          learning_semaphore -= 1
+
 
       except ValueError as e:
         break

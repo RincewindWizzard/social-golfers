@@ -28,7 +28,8 @@ def load_state(groups, size, weeks):
 
 def get_solution(groups, size, weeks):
   if already_solved(groups, size, weeks):
-    return json.load(open(solution_filename(groups, size, weeks), 'r'))
+    with open(solution_filename(groups, size, weeks), 'r') as f:
+      return sgp.parse_solution(f.read())
   else:
     pool = load_state(groups, size, weeks)
     solver = SGP_solver(groups, size, weeks, pool=pool)
@@ -43,7 +44,7 @@ def main():
     weeks = int(sys.argv[3])
 
     solution = get_solution(groups, size, weeks)
-    print(repr_solution(normalize_solution(solution)))
+    print(sgp.repr_solution(sgp.normalize_solution(solution)))
 
   else:
     max_groups = 9

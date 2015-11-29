@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import random
-import itertools
+import itertools, json
 
 
 # Erzeugt eine zufällige Lösung
@@ -26,10 +26,10 @@ def normalize_solution(solution):
   return solution
 
 # Menschenlesbare Repräsentation einer Lösung
+playernames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Б', 'Г', 'Д', 'Ж', 'З', 'И', 'Л', 'П', 'Ф', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
 def repr_solution(solution):
   solution = normalize_solution(solution)
-  
-  playernames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Б', 'Г', 'Д', 'Ж', 'З', 'И', 'Л', 'П', 'Ф', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я']
+ 
   s = '[\n'
   for week in solution:
       s += '\t['
@@ -38,6 +38,11 @@ def repr_solution(solution):
       s += '\n\t],\n'
   s += '\n]'
   return s
+
+def parse_solution(data):
+  for i, name in enumerate(playernames):
+    data = data.replace(name, str(i))
+  return eval(data)
 
 # bildet 2-er tuple aus einer Liste von Zahlen
 def combinations(l):

@@ -1,0 +1,14 @@
+Um die These der Autoren zu prüfen habe ich eine eigene Implentierung des beschriebenen Algorithmus vorgenommen, wobei ich bemüht war, möglichst genau das beschriebene Verfahren nach zu bilden.
+Hierbei sind mir einige Punkte aufgefallen, die ungenau bzw. nicht angegeben waren. 
+Zum Anfang der Suche wird ein Pool an zufälligen Lösungen erzeugt, aus denen immer wieder Lösungen ausgewählt werden. Die Größe dieses Pools ist allerdings nicht weiter spezifiziert. 
+Im Lernschritt, der aus der lokalen Suche besteht, fehlt die Angabe, wie lange diese ausgeführt werden soll, ebenso im Hauptteil.
+
+Da im Haupteil bei jedem Schritt eine Lösung aus dem Pool gewählt und verbessert wird, ist es sinnvoll die Anzahl der Iterationen in der Hauptschleife deutlich größer als die Größe des Genpools zu wählen, 
+da sonst einige Individuen nie ausgewählt werden können. Bei der Lokalen Suche habe ich mich entschieden einen Zähler zu nutzen, der immer dekrementiert wird, wenn die Lösung nicht verbessert wurde.
+Dies passt besser zu den Anförderungen als eine feste Zahl. Bei der Anzahl Durchläufen sollte man bedenken, dass die Tabuliste mit $100$ beschränkt ist. 
+Es ist also nicht sinnvoll, mehr als $100$ Iterationen durch zu führen, da dies die Tabu Liste aushebeln würde. 
+Weil die lokale Suche das Kernelement ist, um Lösungen zu verbessern, sollten allerdings auch nicht zu wenige Iterationen verwendet werden.
+Für mein Programm habe ich einen Pool der Größe 4, maximal 30 fehlgeschlagene Iterationen in der lokalen Suche und insgesamt einen Timeout von 10 Minuten gewählt. 
+
+
+
