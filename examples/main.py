@@ -4,6 +4,7 @@ import random, copy, operator, json
 import os.path
 import sgp
 from memetic import SGP_solver
+from time import time
 
 def solution_filename(groups, size, weeks):
   return './solutions/done/{}_{}_{}.json'.format(groups, size, weeks)
@@ -26,13 +27,13 @@ def load_state(groups, size, weeks):
   else:
     return None
 
-def get_solution(groups, size, weeks):
+def get_solution(groups, size, weeks, timeout = 600):
   if already_solved(groups, size, weeks):
     with open(solution_filename(groups, size, weeks), 'r') as f:
       return sgp.parse_solution(f.read())
   else:
     pool = load_state(groups, size, weeks)
-    solver = SGP_solver(groups, size, weeks, pool=pool)
+    solver = SGP_solver(groups, size, weeks, pool=pool, timeout = timeout)
     solution = solver.solve()
     save_state(solver)
     return solution
@@ -42,10 +43,12 @@ def main():
     groups = int(sys.argv[1])
     size = int(sys.argv[2])
     weeks = int(sys.argv[3])
+    timeout = int(sys.argv[4]) if len(sys.argv) == 5 else 600
 
-    solution = get_solution(groups, size, weeks)
+    start = time()
+    solution = get_solution(groups, size, weeks, timeout = timeout)
     print(sgp.repr_solution(sgp.normalize_solution(solution)))
-
+    print(time() - start, 'seconds')
   else:
     max_groups = 9
     max_size = 9
