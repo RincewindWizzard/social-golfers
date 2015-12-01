@@ -1,0 +1,33 @@
+[
+	[
+		[A, B, G, O],
+		[C, I, J, M],
+		[D, E, F, L],
+		[H, K, N, P],
+	],
+	[
+		[A, C, E, K],
+		[B, F, H, J],
+		[D, G, M, N],
+		[I, L, O, P],
+	],
+	[
+		[A, D, J, P],
+		[B, C, L, N],
+		[E, G, H, I],
+		[F, K, M, O],
+	],
+	[
+		[A, F, I, N],
+		[B, E, M, P],
+		[C, D, H, O],
+		[G, J, K, L],
+	],
+	[
+		[A, H, L, M],
+		[B, D, I, K],
+		[C, F, G, P],
+		[E, J, N, O],
+	],
+
+]
