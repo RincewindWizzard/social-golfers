@@ -1,12 +1,14 @@
 \subsection{Evolution}
-Die bereits benannten Symmetrien erschweren den Entwurf eines evolutionären Algorithmus, da schwer entscheidbar ist, ob eine neue Lösung sich überhaupt von den Bisherigen unterscheidet.
+Die bereits benannten Symmetrien erschweren den Entwurf eines evolutionären Algorithmus, da schwer entscheidbar ist, ob eine neue Lösung sich überhaupt von den Bisherigen
+% 'Bisherigen' wird groß geschrieben, weil es sich in diesem Kontext um eine Nominalisierung handelt
+unterscheidet.
 Wenn diese Symmetrien bei der Rekombination von zwei Lösungen nicht von vorne herein ausgeschlossen werden können, gewinnt man hierdurch keine Zeit. 
 Aus diesen Gründen wird für den hier vorgestellten Algorithmus auch auf die Rekombination verzichtet und wir beschränken uns auf eine Mutation. 
 
-Sei dazu $\sigma$ ein $w$ Wochen langer Spielplan mit $g$ Gruppen zu je $s$ Spielern. Die Darstellung erfolgt über einen String $u = t_{11} :: t_{12} :: \cdots :: t_{wg}$ mit $t_{ij} \in \N_{g \cdot s}^s$.
+Sei dazu $\sigma$ ein $w$ Wochen langer Spielplan mit $g$ Gruppen zu je $s$ Spielern. Die Darstellung erfolgt über einen String\label{Lösungsstring} $u = t_{11} :: t_{12} :: \cdots :: t_{wg}$ mit $t_{ij} \in \N_{g \cdot s}^s$.
 
 \subsubsection{Beispiel}
-Gegeben sei eine Probleminstanz $(2, 2, 3)$, ein zugehöriger String lautet:
+Gegeben sei eine Probleminstanz $(2, 2, 3)$. Ein zugehöriger String lautet:
 \begin{equation}
 \begin{split} 
   u = 1, 2, 3, 4,\quad 4, 1, 2, 3,\quad 1, 3, 2, 4
@@ -17,14 +19,21 @@ Diese Darstellung berücksichtigt zwar keine Symmetrien, allerdings gilt die Ein
 Um eine neue Woche zu erzeugen nutzen wir also eine beliebige Permutation von $\{ 1, \cdots, g \cdot s\}$. Alle Funktionen und Operatoren innerhalb des Algorithmus nutzen intern diese Struktur. 
 Der Memetische Algorithmus erzeugt einen Pool an Spielplänen, aus denen Lösungen ausgewählt, mutiert und einem Lernprozess unterzogen werden.
 
-Bei der Mutation werden innerhalb einer Woche zwei Spieler aus unterschiedlichen Gruppen vertauscht. Die Menge der möglichen Täusche lässt sich beschreiben als:
+Bei der Mutation werden innerhalb einer Woche $\omega$ zwei Spieler $p_1, p_2$ aus unterschiedlichen Gruppen vertauscht. Die Menge der möglichen Vertauschungen lässt sich beschreiben als:
 \begin{equation}
   \mathcal{S}(\sigma) = \{ ((\omega, p_1), (\omega, p_2)) \;|\; \gamma(p_1, \omega) \neq \gamma(p_2, \omega) \}
 \end{equation}
-Jede ausgewählte Lösung wird eine Poisson-Verteilte Anzahl mit dem Parameter $(g \cdot s)^{-1}$ oft wiederholt, sodass im Mittel $w$ mal getauscht wird.
-Die Mutation führt dazu, dass die Suche nicht nur lokale Optima findet, sondern auch
+Eine ausgewählte Lösung wird eine zufällige Anzahl, deren Mittelwert bei $\omega$ liegt, oft mutiert.
 
+%Jede ausgewählte Lösung wird eine Poisson-Verteilte Anzahl mit dem Parameter $(g \cdot s)^{-1}$ oft wiederholt, sodass im Mittel $w$ mal getauscht wird.
+%Die Mutation führt dazu, dass die Suche nicht nur lokale Optima findet, sondern auch
 
+%Es wurden zwei Strategien für den Lernvorgang betrachtet: Baldwin und Lamarck.
+%Beim Baldwin'schen Lernen wird eine lokale Verbesserungsfunktion genutzt, deren Fitness beibehalten wird, ihre phänotypischen Änderungen aber verworfen werden. 
+%Es wird also eine Lösung daran bewertet, wie gut sie bekommen könnte.
+%Im Gegensatz dazu wird bei der Lamarck-Strategie auch die phänotypischen Änderungen weiterverwendet.
+%Die Autoren äußern sich leider nicht dazu, wie sie diesen Zusammenhang in ihrem Algorithmus angewandt haben, 
+%attestieren der Lamarck-Strategie aber für ihren Algorithmus eine höhere Effizienz.
 
 \subsection{Lokale Suche}
 Wie auch bei der Mutation werden bei der lokalen Suche Spieler aus unterschiedlichen Gruppen einer Woche vertauscht. 
@@ -33,15 +42,18 @@ Wir drücken dies aus mit $v_0((\omega, p)) = \texttt{true}$ genau dann, wenn:
 \begin{equation}
   \exists p' \in \sigma(\gamma(p,\omega), \omega): p' \neq p \Rightarrow v_\sigma(p, p') > 1
 \end{equation}
-Die Menge der hierdurch möglichen Täusche ist:
+Die Menge der hierdurch möglichen Vertauschungen ist:
 \begin{equation}
   \mathcal{S}^-(\sigma) = \{ ((\omega, p_1), (\omega, p_2)) \in \mathcal{S} \;|\; v_0((\omega, p_1)) \}
 \end{equation}
 
 
 \subsection{Tabu}
-Der Tabu Teil des Algorithmus besteht aus mehreren Listen für je eine Woche in denen Tupel der Form $(p_1, p_2, i)$ enthalten sind. Wir bezeichnen mit $tabu[\omega]$ die Tabu Liste für die Woche $\omega$. 
-Jedes Mal, wenn zwei Spieler getauscht worden sind, wird ein zufälliger Wert $\rho \in [4, 100]$ erzeugt. Dieser gibt an, wie viele Iterationen diese beiden Spieler nicht mehr getauscht werden dürfen. Die Summe von $\rho$ und der aktuellen Iteration wird in $i$ gespeichert. Hieraus resultiert eine neue Tauschmenge:
+Die lokale Suche wurde durch einen Tabumechanismus ergänzt, welcher sich bereits gemachte Schritte merkt und das wiederholte Tauschen zweier bereits miteinander getauschter Spieler für eine zufällige Anzahl Züge unterbindet.
+Wenn allerdings das Tauschen zweier Spieler eine deutliche Verbesserung nach sich zieht, wird die Tabuliste ignoriert.
+Dieser Teil besteht aus mehreren Listen für je eine Woche in denen Tupel der Form $(p_1, p_2, i)$ enthalten sind. Wir bezeichnen mit $tabu[\omega]$ die Tabu Liste für die Woche $\omega$. 
+Jedes Mal, wenn zwei Spieler getauscht worden sind, wird ein zufälliger Wert $\rho \in [4, 100]$ erzeugt. Dieser gibt an, wie viele Iterationen diese beiden Spieler nicht mehr getauscht werden dürfen. 
+Die Summe von $\rho$ und der aktuellen Iteration wird in $i$ gespeichert. Hieraus resultiert eine neue Tauschmenge:
 \begin{equation}
 \begin{split} 
   \mathcal{S}^t(\sigma, k) = & \{ ((\omega, p_1), (\omega, p_2)) \in \mathcal{S}^- \\
@@ -55,5 +67,5 @@ Parallel zu dieser Tabu Suche werden allerdings auch Schritte beachtet, die die 
 \end{equation}
 Hierbei bezeichnet $\sigma^*$ die beste bekannte Lösung und $\sigma [(\omega, p_1) \leftrightarrow (\omega, p_2)]$ bezeichnet die Lösung, bei der in der  Woche $\omega$ Spieler $p_1$ und $p_2$ getauscht wurden.\\
 $f(\sigma [t_1 \leftrightarrow t_2])$ ist die Anzahl der Integritätsverletzungen, welche die neue Lösung hat.
-Wenn also das Tauschen zweier Spieler eine deutliche Verbesserung nach sich zieht, wird die Tabuliste ignoriert.
+
 

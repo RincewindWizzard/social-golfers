@@ -1,0 +1,38 @@
+Beim Bearbeiten des Artikels ist mir aufgefallen, dass die behandelten Strategien zur Symmetrievermeidung, zwar richtig und essentiell zum Vergleichen von Lösungen sind, 
+allerdings werden sie für den vorgestellten Algorithmus gar nicht verwendet, da keine Lösungen miteinander verglichen werden. 
+Im Übrigen fehlt ein Abschnitt über das Vermeiden von Umbenennungssymmetrien, zu denen ich folgenden Vorschlag habe:
+
+Sei eine Lösung zur Probleminstanz $(3,2,2)$ wie folgt:
+\begin{equation}
+\begin{split} 
+  u =& A, C,\enspace B, F,\enspace D, E \\
+    &  A, D, \enspace B, C, \enspace E, F
+\end{split}
+\end{equation}
+Wir Substituieren die Namen der Golfer, in der Art, dass in der ersten Woche die Identität steht. 
+Dies ist verträglich mit (\ref{Gruppenordnung}) und (\ref{Wochenordnung}) und schränkt den Symmetrieraum, wenn auch nicht erschöpfend, weiter ein.
+\begin{equation}
+\begin{split} 
+  u =& A, B,\enspace C, D,\enspace E, F \\
+    &  A, E, \enspace C, B, \enspace F, D
+\end{split}
+\end{equation}
+
+Alles in allem ist der vorliegende Artikel sehr interessant, vor allem, wenn man bedenkt, dass ein Hauptbestandteil des Verfahrens Zufall ist, aber trotzdem sehr zuferlässig Lösungen produziert werden.
+Ich bin überrascht worden, wie groß das Interesse an diesem Problem ist. 
+Es gibt sogar jemanden, der Excel Tabellen für \$ 34 verkauft, in denen man die Namen der Spieler für bestimmte Probleminstanzen eintragen kann\footnote{\url{http://probablegolfinstruction.com/tournament_pairings.htm}}.
+
+Schön ist auch, dass es sich hierbei nicht um ein rein konstruiertes Problem handelt, sondern der originale Fragensteller tatsächlich Golf spielen wollte:
+\begin{quote}
+Please help with this problem.
+I have 32 golfers, individual play.
+We will golf for 16 weeks.
+I want to set up the foursomes so each person only golfs
+with the same person once.
+How many weeks can we do this before it starts to duplicate ?
+Help !!
+Is it only four?
+It should be eight ?
+I can't figure it out and neither can anyone else.
+\par\raggedleft--- \textup{Bigwind777},\quad \texttt{sci.op-research}
+\end{quote}

@@ -9,11 +9,15 @@ $n$ Golfern spielen in $g$ Gruppen der Größe $s$ $w$ Wochen lang. Erstellen Si
 \end{quote}
 Die allgemeine Variante hat internationale Bekanntheit erlangt, nachdem sie im Mai 1998 in der Newsgroup \texttt{sci.op-research} veröffentlicht wurde.
 
-Das allgemeine SGP ist für einige Probleminstanzen hinreichend komplex, dass in absehbarer Zeit keine Lösung erwartet wird. Es liegt die Vermutung nahe, dass es sich hierbei um ein NP-vollständiges\footnote{->Entweder erklären oder Satz streichen.} Problem handelt.
-Erschwerend kommt hinzu, dass Lösungen für das SGP eine hohe Symmetriedichte aufweisen. Beispielsweise können innerhalb eines Spielplanes die Wochen getauscht werden, sowie die Gruppen innerhalb einer Woche. Auch können zwei Spieler vertauscht werden, ohne dass sich die Lösung prinzipiell von der Alten unterscheidet. Jeder Lösungsansatz, der sich nicht eingehend mit dieser Erschwernis befasst, ist dazu verdammt, immer wieder redundante Lösungen zu finden.
+Das allgemeine SGP ist für einige Probleminstanzen hinreichend komplex, dass in absehbarer Zeit keine Lösung erwartet wird. Es liegt die Vermutung nahe, dass es sich hierbei um ein NP-vollständiges Problem handelt.
+Erschwerend kommt hinzu, dass Lösungen für das SGP eine hohe Symmetriedichte aufweisen. 
+Beispielsweise können innerhalb eines Spielplanes die Wochen getauscht werden, sowie die Gruppen innerhalb einer Woche. 
+Auch können zwei Spieler vertauscht werden, ohne dass sich die Lösung prinzipiell von der Alten unterscheidet. 
+Jeder Lösungsansatz, der sich nicht eingehend mit dieser Erschwernis befasst, ist dazu verdammt, immer wieder redundante Lösungen zu finden.
 
 Vor diesem Hintergrund ist ein Algorithmus, der für eine Probleminstanz $(g,s,w)$ in vertretbarer Zeit einen Spielplan erzeugt, von großem Interesse.
-Mehrere Ansätze, zum Beispiel aus der Constraints Programmierung (z.B. \cite{fahle01}, \cite{smith01}, \cite{sellmann02}) oder mit Hilfe von SAT Solvern (z.B. \cite{triska08}), wurden schon verfolgt. Allerdings war unter den bisherigen Algorithmen noch keiner, mit einem evolutionären Ansatz.
+Mehrere Ansätze, zum Beispiel aus der Constraints Programmierung (z.B. \cite{fahle01}, \cite{smith01}, \cite{sellmann02}) oder mit Hilfe von SAT Solvern (z.B. \cite{triska08}), 
+wurden schon verfolgt. Allerdings war unter den bisherigen Algorithmen noch keiner, mit einem memetischen Ansatz.
 Die Kombination von Selektion, Mutation und lokaler Suche, welche als \enquote{memetischer Algorithmus} bezeichnet wird, führt zu einer Performance, die sich mit den Alternativen messen kann.
 
 
