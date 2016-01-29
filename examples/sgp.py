@@ -34,13 +34,13 @@ def repr_solution(solution):
   for week in solution:
       s += '\t['
       for group in week:
-        s += '\n\t\t[' + ', '.join(map(lambda i: playernames[i], group)) + '],'
+        s += '\n\t\t[' + ', '.join(map(lambda i: playernameSs[i], group)) + '],'
       s += '\n\t],\n'
   s += '\n]'
   return s
 
 def parse_solution(data):
-  for i, name in enumerate(playernames):
+  for i, name in enumerate(playernames):  
     data = data.replace(name, str(i))
   return eval(data)
 
