@@ -1,0 +1,13 @@
+nex_viol, w, a, b = min(
+          filter(
+            # entweder verbessert dieser Tausch diese Lösung zur Besten
+            # oder er ist nicht tabu
+            lambda t: t[0] < best_violations or not tuple(sorted((t[2], t[3]))) in tabu[t[1]] or tabu[t[1]][tuple(sorted((t[2], t[3])))] < iteration,
+            map(
+              lambda t: (evaluate_swap(solution, t), t[0], t[1], t[2]), 
+              swaps(solution)
+            )
+          )
+        )
+
+[[[0, 5, 11], [1, 7, 8], [2, 3, 10], [4, 6, 9]], [[0, 6, 7], [1, 2, 8], [3, 9, 11], [4, 5, 10]], [[0, 10, 11], [1, 5, 6], [2, 7, 9], [3, 4, 8]]]
