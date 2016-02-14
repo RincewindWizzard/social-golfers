@@ -14,10 +14,10 @@ Gegeben sei eine Probleminstanz $(2, 2, 3)$. Ein zugehöriger String lautet:
   u = 1, 2, 3, 4,\quad 4, 1, 2, 3,\quad 1, 3, 2, 4
 \end{split}
 \end{equation}
-Ein Spielplan wird also als Aneinanderreihung von Spielernummern gruppiert nach Woche und Gruppe dargestellt. Diese Darstellung ist äquivalent zu bisher präsentierten mathematischen Modellierung.
+Ein Spielplan wird also als Aneinanderreihung von Spielernummern gruppiert nach Woche und Gruppe dargestellt. Diese Darstellung ist äquivalent zur bisher präsentierten mathematischen Modellierung.
 Diese Darstellung berücksichtigt zwar keine Symmetrien, allerdings gilt die Einschränkung, dass ein Golfer nur einmal pro Woche eingeteilt werden kann. 
 Um eine neue Woche zu erzeugen nutzen wir also eine beliebige Permutation von $\{ 1, \cdots, g \cdot s\}$. Alle Funktionen und Operatoren innerhalb des Algorithmus nutzen intern diese Struktur. 
-Der Memetische Algorithmus erzeugt einen Pool an Spielplänen, aus denen Lösungen ausgewählt, mutiert und einem Lernprozess unterzogen werden.
+Der memetische Algorithmus erzeugt einen Pool an Spielplänen, aus denen Lösungen ausgewählt, mutiert und einem Lernprozess unterzogen werden.
 
 Bei der Mutation werden innerhalb einer Woche $\omega$ zwei Spieler $p_1, p_2$ aus unterschiedlichen Gruppen vertauscht. Die Menge der möglichen Vertauschungen lässt sich beschreiben als:
 \begin{equation}
